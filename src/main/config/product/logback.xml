@@ -1,0 +1,98 @@
+<configuration scan="false" scanPeriod="10 seconds" debug="false">
+	　　
+	<!--<property name="LOG_PATTERN" value="%d{HH:mm:ss:SSS} %20.100c{1} [%-5p] %X{user} %m %n"/>-->
+	<property name="LOG_PATTERN" value="%date{yyyy-MM-dd HH:mm:ss} %-5level %thread %logger:%line %X{receiver} %msg%n"/>
+	<property name="LOG_HOME" value="logs/"/>
+	<property name="maxHistory" value="30"/>
+
+	<appender name="D" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}debug.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}debug.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+			<immediateFlush>true</immediateFlush>
+		</encoder>
+	</appender>
+	<appender name="I" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}info.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}info.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+			<immediateFlush>true</immediateFlush>
+		</encoder>
+	</appender>
+	<appender name="W" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}warn.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}warn.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+			<immediateFlush>true</immediateFlush>
+		</encoder>
+	</appender>
+	<appender name="E" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}error.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}error.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+			<maxHistory>${maxHistory}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+			<immediateFlush>true</immediateFlush>
+		</encoder>
+	</appender>
+	<!--ELK日志输出文件-->
+	<appender name="ELK_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}elk.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}elk.log.%d{yyyy-MM-dd_HH}.%i</fileNamePattern>
+			<maxFileSize>200MB</maxFileSize>
+			<maxHistory>${maxHistory}</maxHistory>
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%m%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+	<root level="INFO">
+		<appender-ref ref="I"/>
+		<appender-ref ref="W"/>
+		<appender-ref ref="E"/>
+	</root>
+	<logger name="elk" level="TRACE">
+		<appender-ref ref="ELK_FILE"/>
+	</logger>
+	<logger name="org.mybatis.spring" level="WARN"/>
+	<logger name="springfox.documentation" level="WARN"/>
+	<logger name="springfox.documentation" level="WARN"/>
+	<logger name="org.springframework" level="WARN"/>
+	<logger name="com.mchange.v2" level="WARN"/>
+	<logger name="metrics_influxdb.measurements" level="WARN"/>
+	<logger name="org.eclipse.jetty" level="WARN"/>
+	<logger name="RocketmqClient" level="WARN"/>
+	<logger name="RocketmqRemoting" level="WARN"/>
+</configuration>

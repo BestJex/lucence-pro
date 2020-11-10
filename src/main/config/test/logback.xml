@@ -1,0 +1,110 @@
+<configuration scan="false" scanPeriod="60 seconds" debug="true">
+	<property name="APP_Name" value="myAppName"/>
+	<property name="LOG_HOME" value="logs/"/>
+	<property name="maxHistory" value="30"/>
+
+	<contextName>${APP_Name}</contextName>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!--支持的色值blue cyan faint green magenta red yellow-->
+			<pattern>%green(%date{HH:mm:ss})[%highlight(%-5level)]%boldYellow(%-1.4thread) %boldGreen(%-30.30logger{20}) %msg%n
+				<!--<pattern>%green(%date{HH:mm:ss})[%highlight(%-5level)]%boldYellow(%-1.4thread) %boldGreen(%logger) %msg%n-->
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!--设置日志输出为文件-->
+	<appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}info.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}info.log.%d{yyyy-MM-dd_HH}.%i</fileNamePattern>
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>${maxHistory}</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{receiver} %msg%n</pattern>
+		</encoder>
+		<!--ThresholdFilter： 级别过滤器，根据日志级别进行过滤。如果日志级别等于配置级别，过滤器会根据onMath 和 onMismatch接收或拒绝日志。有以下子节点：
+                          <level>:设置过滤级别
+                          <onMatch>:用于配置符合过滤条件的操作
+                          <onMismatch>:用于配置不符合过滤条件的操作-->
+		<!--<filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+		<!--<level>INFO</level>-->
+		<!--<onMatch>ACCEPT</onMatch>-->
+		<!--<onMismatch>DENY</onMismatch>-->
+		<!--</filter>-->
+
+		<!--ThresholdFilter： 临界值过滤器，过滤掉低于指定临界值的日志。当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。-->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+	</appender>
+	<appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}debug.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}debug.log.%d{yyyy-MM-dd_HH}.%i</fileNamePattern>
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>${maxHistory}</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{receiver} %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+	</appender>
+	<appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}warn.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}warn.log.%d{yyyy-MM-dd_HH}.%i</fileNamePattern>
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>${maxHistory}</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{receiver} %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+	</appender>
+	<appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}error.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}error.log.%d{yyyy-MM-dd_HH}.%i</fileNamePattern>
+			<maxFileSize>20MB</maxFileSize>
+			<maxHistory>${maxHistory}</maxHistory>
+			<totalSizeCap>20GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%date{yyyy-MM-dd HH:mm:ss}] [%-5level] [%logger:%line] --%mdc{receiver} %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+	</appender>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="INFO_FILE" />
+		<appender-ref ref="DEBUG_FILE" />
+		<appender-ref ref="WARN_FILE" />
+		<appender-ref ref="ERROR_FILE" />
+	</root>
+	<logger name="org.mybatis.spring" level="WARN"/>
+	<logger name="springfox.documentation" level="WARN"/>
+	<logger name="springfox.documentation" level="WARN"/>
+	<logger name="org.springframework" level="WARN"/>
+	<logger name="com.mchange.v2" level="WARN"/>
+	<logger name="metrics_influxdb.measurements" level="WARN"/>
+	<logger name="org.eclipse.jetty" level="WARN"/>
+	<logger name="org.apache" level="WARN"/>
+	<logger name="RocketmqClient" level="WARN"/>
+	<logger name="RocketmqRemoting" level="WARN"/>
+</configuration>
